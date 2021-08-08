@@ -6,6 +6,7 @@ ranger
 vlc
 nordvpn
 zathural
+xclip
 tlp
 redshift
 awesome
