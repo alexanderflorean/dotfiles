@@ -17,3 +17,6 @@ alias fgrep='fgrep --color=auto'
 alias cp="cp -i"
 alias mv='mv -i'
 alias rm='rm -i'
+
+# Run fish in vim mode
+fish_vi_key_bindings
