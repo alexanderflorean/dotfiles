@@ -23,7 +23,7 @@ local hotkeys_popup = require("awful.hotkeys_popup")
 -- Battery Widget
 local batteryarc_widget = require("awesome-wm-widgets.batteryarc-widget.batteryarc")
 -- Volumearc Widget
-local volumearc_widget = require("awesome-wm-widgets.volumearc-widget.volumearc")
+local volumearc_widget = require("awesome-wm-widgets.volume-widget.volume")
 
 local GET_VOLUME_CMD = 'amixer -D pulse sget Master'
 local INC_VOLUME_CMD = 'amixer -q -D pulse sset Master 5%+'
@@ -33,7 +33,7 @@ local TOG_VOLUME_CMD = 'amixer -q -D pulse sset Master toggle'
 local cpu_widget = require("awesome-wm-widgets.cpu-widget.cpu-widget")
 
 -- Spotify Widget
-local spotify_widget = require("awesome-wm-widgets.spotify-widget.spotify")
+-- local spotify_widget = require("awesome-wm-widgets.spotify-widget.spotify")
 -- =======================================
 -- Enable hotkeys help widget for VIM and other apps
 -- when client with a matching name is opened:
@@ -75,7 +75,7 @@ local modkey = "Mod4"
 local browser           = "firefox"
 local filemanager       = "ranger"
 local editor            = os.getenv("EDITOR") or "editor"
-local terminal          = os.getenv("TERMINAL") or os.getenv("TERM")
+local terminal          = os.getenv("TERMINAL")
 local editor_cmd        = terminal ..  " -e " .. editor
 
 -- Themes define colours, icons, font and wallpapers.
@@ -207,7 +207,7 @@ screen.connect_signal("property::geometry", set_wallpaper)
 awful.screen.connect_for_each_screen(function(s)
     -- Wallpaper
     --set_wallpaper(s)
-    awful.spawn.easy_async_with_shell("nitrogen --restore")
+    -- awful.spawn.easy_async_with_shell("nitrogen --restore")
 
 
 
@@ -255,30 +255,31 @@ awful.screen.connect_for_each_screen(function(s)
         s.mytasklist, -- Middle widget
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
-            spotify_widget({
-                play_icon = '/usr/share/icons/Papirus-Light/24x24/categories/spotify.svg',
-                pause_icon = '/usr/share/icons/Papirus-Dark/24x24/panel/spotify-indicator.svg',
-                dim_when_paused = true,
-                dim_opasity = 0.5,
-                show_tooltip = false
-            }),
+--            spotify_widget({
+--                play_icon = '/usr/share/icons/Papirus-Light/24x24/categories/spotify.svg',
+--                pause_icon = '/usr/share/icons/Papirus-Dark/24x24/panel/spotify-indicator.svg',
+--                dim_when_paused = true,
+--                dim_opasity = 0.5,
+--                show_tooltip = false
+--            }),
             mykeyboardlayout,
             cpu_widget({
                 enable_kill_button = true
             }),
             wibox.widget.systray(),
             mytextclock,
-            volumearc_widget({
-                thickness = 3,
-                mute_color = '#000000',
-                button_press = function(_, _, _, button) --overwrites button press behaviour to open pavucontrol when clicked
-                    if (button == 1) then awful.spawn(TOG_VOLUME_CMD, false)
-                    elseif (button == 3) then awful.spawn("pavucontrol --tab=3", false)
-                    elseif (button == 4) then awful.spawn(INC_VOLUME_CMD, false)
-                    elseif (button == 5) then awful.spawn(DEC_VOLUME_CMD, false)
-                    end
-                end
-            }),
+--            volume_widget{
+--                widget_type = "arc",
+--                thickness = 3,
+--                mute_color = '#000000',
+--                button_press = function(_, _, _, button) --overwrites button press behaviour to open pavucontrol when clicked
+--                    if (button == 1) then awful.spawn(TOG_VOLUME_CMD, false)
+--                    elseif (button == 3) then awful.spawn("pavucontrol --tab=3", false)
+--                    elseif (button == 4) then awful.spawn(INC_VOLUME_CMD, false)
+--                    elseif (button == 5) then awful.spawn(DEC_VOLUME_CMD, false)
+--                    end
+--                end
+--            },
             batteryarc_widget({
                 show_current_level = true,
                 arc_thickness = 3,
@@ -730,11 +731,11 @@ local autorun = true
 autorunApps =
 {
     "bash dotfiles/scripts/.screenlayout/home.sh",
---    "bash dotfiles/scripts/swap-caps_lock-escape.sh",
-    "nitrogen --restore",
-    "redshift-gtk",
-    "xinput disable 14",
-    "./dotfiles/scripts/switch_keyboardlayout.sh"
+--    "nitrogen --restore",
+--    "redshift-gtk",
+--    "xinput disable 14",
+    "./dotfiles/scripts/switch_keyboardlayout.sh",
+    "bash dotfiles/scripts/swap-caps_lock-escape.sh"
 
 }
 if autorun then

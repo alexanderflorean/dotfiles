@@ -1,6 +1,5 @@
 export EDITOR='vim'
-#export TERM="x-terminal-emulator"
-#export TERMINAL="x-terminal-emulator"
+export TERMINAL="x-terminal-emulator"
 export NOTES_DIR="~/Documents/notes/"
 
 # sets vim as manpager
@@ -130,6 +129,6 @@ fi
 #fi
 
 clear
-neofetch
+#neofetch
 
 #source ~/.bash_completion/alacritty
