@@ -731,11 +731,10 @@ local autorun = true
 autorunApps =
 {
     "bash dotfiles/scripts/.screenlayout/home.sh",
---    "nitrogen --restore",
+    "nitrogen --restore",
 --    "redshift-gtk",
 --    "xinput disable 14",
-    "./dotfiles/scripts/switch_keyboardlayout.sh",
-    "bash dotfiles/scripts/swap-caps_lock-escape.sh"
+    "bash dotfiles/scripts/setup-keyboard.sh"
 
 }
 if autorun then

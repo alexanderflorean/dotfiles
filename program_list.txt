@@ -9,6 +9,7 @@ nordvpn
 zathural
 xclip
 tlp
+htop
 redshift
 awesome
 neofetch
