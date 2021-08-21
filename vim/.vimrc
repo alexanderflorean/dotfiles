@@ -150,7 +150,7 @@ map <Leader>C :call Uncomment()<CR>
 " ** ctags **
 set tags+=./tags;,tags
 " Generates ctags silently
-nnoremap <Leader>tt :silent !ctags -R ~/Documents/notes/ <CR>:redraw!<CR>
+nnoremap <Leader>tt :silent !ctags -R $NOTES_DIR <CR>:redraw!<CR>
 " Go to index of notes and set working directory to my notes
 nnoremap <leader>ni :e $NOTES_DIR/index.md<CR>:cd $NOTES_DIR<CR>
 
@@ -184,13 +184,13 @@ augroup END
 
 " VimWiki ===================================================================
 let my_wiki = {}
-let my_wiki.path = '~/Documents/notes/' 
+let my_wiki.path = $NOTES_DIR             "'~/Documents/notes/' 
 let my_wiki.syntax = 'markdown'
 let my_wiki.ext = '.md'
 let my_wiki.automatic_nested_syntaxes = 1
 
 let my_zettelkasten = {}
-let my_zettelkasten.path = '~/Documents/notes/zettelkasten/'
+let my_zettelkasten.path = $NOTES_DIR . '/zettelkasten/'
 let my_zettelkasten.syntax = 'markdown'
 let my_zettelkasten.ext = '.md'
 let my_zettelkasten.automatic_nested_syntaxes = 1
@@ -213,7 +213,7 @@ nmap <silent> <leader>wb :Vimwiki2HTMLBrowse<CR>
 au FileType markdown nnoremap <Leader>n gg5dd6j
 
 " *** Zettlekasten ***
-let g:nv_search_paths = ['~/Documents/notes/zettelkasten/']
+let g:nv_search_paths = [ $NOTES_DIR . '/zettelkasten/']
 let g:nv_default_extension = '.md'
 let g:zettel_format = "%title-%d%m%y-%H%M"
 let g:zettel_date_format = '%d-%m/%Y'

@@ -4,7 +4,7 @@ set fish_greeting               # Supresses fish's intro message
 
 set TERM "xterm-256color"
 set EDITOR "vim"
-set NOTES_DIR "~/Documents/notes/"
+set -x NOTES_DIR "~/Dropbox/notes/"
 set -U VIRTUALFISH_HOME $HOME/ExtraSpace/python_venvs/
 
 ### Aliases ###
@@ -20,3 +20,7 @@ alias rm='rm -i'
 
 # Run fish in vim mode
 fish_vi_key_bindings
+
+
+# get error messages from journalctl
+alias jctl="journalctl -p 3 -xb"
