@@ -20,20 +20,11 @@ local hotkeys_popup = require("awful.hotkeys_popup")
 
 
 -- ==== StreetTurtle Awesome widgets ====
--- Battery Widget
 local batteryarc_widget = require("awesome-wm-widgets.batteryarc-widget.batteryarc")
--- Volumearc Widget
-local volumearc_widget = require("awesome-wm-widgets.volume-widget.volume")
-
-local GET_VOLUME_CMD = 'amixer -D pulse sget Master'
-local INC_VOLUME_CMD = 'amixer -q -D pulse sset Master 5%+'
-local DEC_VOLUME_CMD = 'amixer -q -D pulse sset Master 5%-'
-local TOG_VOLUME_CMD = 'amixer -q -D pulse sset Master toggle'
--- Cpu Widget
+local volume_widget = require('awesome-wm-widgets.volume-widget.volume')
+local brightness_widget = require("awesome-wm-widgets.brightness-widget.brightness")
 local cpu_widget = require("awesome-wm-widgets.cpu-widget.cpu-widget")
-
--- Spotify Widget
--- local spotify_widget = require("awesome-wm-widgets.spotify-widget.spotify")
+ local spotify_widget = require("awesome-wm-widgets.spotify-widget.spotify")
 -- =======================================
 -- Enable hotkeys help widget for VIM and other apps
 -- when client with a matching name is opened:
@@ -255,31 +246,25 @@ awful.screen.connect_for_each_screen(function(s)
         s.mytasklist, -- Middle widget
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
---            spotify_widget({
---                play_icon = '/usr/share/icons/Papirus-Light/24x24/categories/spotify.svg',
---                pause_icon = '/usr/share/icons/Papirus-Dark/24x24/panel/spotify-indicator.svg',
---                dim_when_paused = true,
---                dim_opasity = 0.5,
---                show_tooltip = false
---            }),
+            spotify_widget({
+                play_icon = '/usr/share/icons/Papirus-Light/24x24/categories/spotify.svg',
+                pause_icon = '/usr/share/icons/Papirus-Dark/24x24/panel/spotify-indicator.svg',
+                dim_when_paused = true,
+                dim_opasity = 0.5,
+                show_tooltip = false
+            }),
             mykeyboardlayout,
             cpu_widget({
                 enable_kill_button = true
             }),
             wibox.widget.systray(),
             mytextclock,
---            volume_widget{
---                widget_type = "arc",
---                thickness = 3,
---                mute_color = '#000000',
---                button_press = function(_, _, _, button) --overwrites button press behaviour to open pavucontrol when clicked
---                    if (button == 1) then awful.spawn(TOG_VOLUME_CMD, false)
---                    elseif (button == 3) then awful.spawn("pavucontrol --tab=3", false)
---                    elseif (button == 4) then awful.spawn(INC_VOLUME_CMD, false)
---                    elseif (button == 5) then awful.spawn(DEC_VOLUME_CMD, false)
---                    end
---                end
---            },
+            brightness_widget(),
+            volume_widget({
+                widget_type = "arc",
+                thickness = 3,
+                mute_color = '#000000',
+            }),
             batteryarc_widget({
                 show_current_level = true,
                 arc_thickness = 3,
@@ -417,49 +402,39 @@ globalkeys = gears.table.join(
 
 ---------------------------------- HOTKEYES ------------------------------------
 -- Volume control
-----TODO: some kind of ui when changing the volume
     -- increase volume
 
-    awful.key({ altkey }, ".", function() awful.spawn(INC_VOLUME_CMD, false) end,
+    awful.key({ altkey }, ".", function() volume_widget:inc() end,
       {description = "Increases Volume", group = "hotkeys"}),
 
-    awful.key({ }, "XF86AudioRaiseVolume",
-        function ()
-            awful.spawn(INC_VOLUME_CMD, false)
-            --os.execute(string.format("amixer -q set Master 1%+",beautiful.volume.channel))
-            --beautiful.volume.update()
-        end,
+    awful.key({ }, "XF86AudioRaiseVolume",function() volume_widget:inc() end,
       {description = "Increases Volume", group = "hotkeys"}),
     
     -- decrease volume
-    awful.key({ altkey }, ",", function() awful.spawn(DEC_VOLUME_CMD, false) end,
+    awful.key({ altkey }, ",", function() volume_widget:dec() end,
       {description = "Decreases Volume", group = "hotkeys"}),
 
-    awful.key({ }, "XF86AudioLowerVolume",
-        function ()
-            awful.spawn(DEC_VOLUME_CMD, false)
-            --os.execute(string.format("amixer -q set Master 1%-", beautiful.volume.channel))
-            --beautiful.volume.update()
-        end,
+    awful.key({ }, "XF86AudioLowerVolume", function() volume_widget:dec() end,
       {description = "Decreases Volume", group = "hotkeys"}),
 
     -- mute volume
-    awful.key({ altkey }, "m", function() awful.spawn(TOG_VOLUME_CMD, false) end,
+    awful.key({ altkey }, "m", function() volume_widget:toggle() end,
       {description = "Mutes sound", group = "hotkeys"}),
 
-    awful.key({ }, "XF86AudioMute",
-        function ()
-            awful.spawn(TOG_VOLUME_CMD, false)
-            --os.execute(string.format("amixer -q set Master toggle", beautiful.volume.togglechannel or beautiful.volume.channel))
-            --beautiful.volume.update()
-        end,
+    awful.key({ }, "XF86AudioMute", function() volume_widget:toggle() end,
       {description = "Mutes sound", group = "hotkeys"}),
 
-    -- TODO:Brightness
-    awful.key({ }, "XF86MonBrightnessUp", function () os.execute("xbacklight -inc 10") end,
-              {description = "Brightness +10%", group = "hotkeys"}),
-    awful.key({ }, "XF86MonBrightnessDown", function () os.execute("xbacklight -dec 10") end,
-              {description = "Brightness -10%", group = "hotkeys"}),
+-- Brightness control
+
+    awful.key({ altkey }, "'", function () brightness_widget:inc() end, 
+        {description = "Increase brightness", group = "custom"}),
+    awful.key({ altkey }, ";", function () brightness_widget:dec() end, 
+        {description = "Decrease brightness", group = "custom"}),
+
+    awful.key({ }, "XF86MonBrightnessUp", function() brightness_widget:inc() end,
+              {description = "Increase brightness", group = "hotkeys"}),
+    awful.key({ }, "XF86MonBrightnessDown", function() brightness_widget:dec() end,
+              {description = "Decrease brightness", group = "hotkeys"}),
 
     -- TODO:Sleep
     awful.key({ }, "XF86Sleep", function () os.execute("i3lock") end,
@@ -732,9 +707,9 @@ autorunApps =
 {
     "bash dotfiles/scripts/.screenlayout/home.sh",
     "nitrogen --restore",
+    "bash dotfiles/scripts/setup-keyboard.sh"
 --    "redshift-gtk",
 --    "xinput disable 14",
-    "bash dotfiles/scripts/setup-keyboard.sh"
 
 }
 if autorun then

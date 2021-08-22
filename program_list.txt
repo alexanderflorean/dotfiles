@@ -20,6 +20,8 @@ dmenu
 # for screen setup
 arandr
 
+light
+
 # for alacritty
 cmake pkg-config libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3
 ## install cargo and rust for alacritty install with following command
