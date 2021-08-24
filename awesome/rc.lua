@@ -707,13 +707,14 @@ autorunApps =
 {
     "bash dotfiles/scripts/.screenlayout/home.sh",
     "nitrogen --restore",
-    "bash dotfiles/scripts/setup-keyboard.sh"
+    "bash dotfiles/scripts/setup-keyboard.sh",
+    "dropbox start",
 --    "redshift-gtk",
 --    "xinput disable 14",
 
 }
 if autorun then
     for app=1, #autorunApps do
-        awful.spawn.easy_async_with_shell(autorunApps[app])
+        awful.spawn.easy_async(autorunApps[app])
     end
 end
